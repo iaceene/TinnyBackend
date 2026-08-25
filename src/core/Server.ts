@@ -42,6 +42,10 @@ export default class Server {
         return this.methodHandler
     }
 
+    getHttpServer(){
+        return this.server;
+    }
+
     getDecorators(){
         return this.decorators
     }
@@ -57,9 +61,6 @@ export default class Server {
     getLogs(){
         return this.logs
     }
-
-   
-
 
     private generateKey(): string{
         return randomBytes(16).toString('hex')

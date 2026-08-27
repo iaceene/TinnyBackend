@@ -23,6 +23,7 @@ import { fileURLToPath } from 'url';
 import { readdir } from 'node:fs/promises';
 import RequestParser from "./Request.js";
 import ResponseParser from "./Response.js";
+import { TinnyWs } from "./Websocket.js";
 
 
 export default class Server {
@@ -37,6 +38,7 @@ export default class Server {
     private logs: Logs[]
     private ServerName: string
     private defaultHandler: HandlerFun
+    private Wss: TinnyWs | null = null;
 
     getMethodHandlers(){
         return this.methodHandler
@@ -60,6 +62,19 @@ export default class Server {
 
     getLogs(){
         return this.logs
+    }
+
+    createWsServer(){
+        if (!this.Wss)
+            this.Wss = new TinnyWs(this);
+        return this
+    }
+
+    getWsServer(){
+        if (this.Wss)
+            return this.Wss.getWss();
+        this.Wss = new TinnyWs(this)
+        return this.Wss.getWss();
     }
 
     private generateKey(): string{
